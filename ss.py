@@ -19,12 +19,12 @@ try:
 
     # Find float
     table = page_html.find_all('table', attrs = {'width':'100%'})[7]
-    sscom_short_float = table.find_all('td', attrs = {'align':'right'})[6].text.replace(" ","")
-    share_float = float(sscom_short_float.replace(',', ''))
-    share_float = round(float(share_float) / 1000000, 1)
+    sscom_stock_float = table.find_all('td', attrs = {'align':'right'})[6].text.replace(" ","")
+    stock_float = float(sscom_stock_float.replace(',', ''))
+    stock_float = round(float(stock_float) / 1000000, 1)
 
     # Results
-    print('Float: ' + str(share_float) + 'M')
+    print('Float: ' + str(stock_float) + 'M')
 
 
 # If not available, print error message
