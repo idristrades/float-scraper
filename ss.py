@@ -1,23 +1,36 @@
+# Import Packages and Modules
 from requests import get
 from bs4 import BeautifulSoup
+from time import sleep
+from time import time
 
+# Prompt for ticker symbol (e.g. AAPL)
 stock = input('Enter ticker symbol:')
 
-try:
+# Set start time to measure the speed of the whole operation
+start = time()
 
-    ss_url = 'https://shortsqueeze.com/?symbol=' + stock
-    response = get(ss_url)
+# Get float from shortsqueeze.com
+try:
+    # Get html
+    sscom_url = 'http://shortsqueeze.com/?symbol=' + stock
+    response = get(sscom_url)
     page_html = BeautifulSoup(response.text,'html.parser')
 
     # Find float
-    table1 = page_html.find_all('table', attrs = {'width':'760'})
-    td = table1.find_all('td', attrs = {'align':'right'})
-    table2 = td.find_all('table')[2]
-    tr1 = table2.find_all('tr')[3]
-    tr2 = tr1.find_all('tr')[6]
-    ss_float = tr2.find('td', class_ ='style12').text
-    
-    print('Float: ' + ss_float)
+    table = page_html.find_all('table', attrs = {'width':'100%'})[7]
+    sscom_short_float = table.find_all('td', attrs = {'align':'right'})[6].text.replace(" ","")
+    share_float = float(sscom_short_float.replace(',', ''))
+    share_float = round(float(share_float) / 1000000, 1)
 
+    # Results
+    print('Float: ' + str(share_float) + 'M')
+
+
+# If not available, print error message
 except:
-    print('error, check code & try again')
+    print('No data available')
+    
+# Calculate the time taken for the entire scraping operation
+end = time()
+print('Time taken: ' + str(round(end - start, 2)) + 's')
